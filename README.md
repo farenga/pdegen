@@ -1,24 +1,36 @@
 # PDEGen
+<p align="center">
+<img align="middle" src="./assets/heat.png" alt="dataset tensor" width="500" />
+</p>
 
 PDEGen is an open-source package for generating datasets of time-dependent parameterized Partial Differential Equations (PDEs) solutions. 
 
-The main aim of the library is to enable reproducibility in the field of Machine Learning for PDEs, where there is a lack of common benchmarking datasets, and dataset-sharing is usually unfeasible, due to file sizes.
+The main aim of the library is to enable reproducibility in the field of Data-Driven PDEs modeling, whose benchmarking datasets landscape is usually characterized by:
+- low data availability/sharing
+- data fragmentation (snapshots, parameters, meshes)
+- Heavy non-tensorized data formats
 
-Even though a kind of common ground for the typical benchmarking equations already exists (Burgers', Heat, Navier-Stokes), unreproducibility arises from additional variables that characterize the differential problems, such as parameters, forcing terms, domain shape and its discretization.
+PDEGen aims to enable datasets generation and reproduction via pre-implemented pde-solvers scripts and a common configuration files-based interface.
 
-PDEGen tryies to solve those problems by providing an intuitive interface for datasets generation and reproduction, via simple configurations.
-
-
-The library implements multiple standard problems (Heat, Advection-Diffusion-Reaction, Stokes)
+In such a way sharing the configuration file is enough for setting up the problem and generating data, instead of sharing big and fragmented datasets.
 
 ## Install
     
-    pip install pdegen
+    pip install git+https://github.com/farenga/pdegen
 
 ## Usage
+By loading a YAML configuration file:
 
     import pdegen
     pdegen.generate("problem_config.yaml")
 
+or by defining a ProblemConfig
 
-### Configuration
+    from pdegen import ProblemConfig
+
+    problem_config = ProblemConfig(
+        problem = 'heat2d',
+        ...
+    )
+    
+    pdegen.generate("problem_config.yaml")

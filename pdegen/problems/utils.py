@@ -33,9 +33,8 @@ def get_param_space(p, config):
     elif len(p)==3:
         p_space = np.linspace(p[0],p[1],p[2])
         if config.midpoints:
-            return midpoints(p_space).to_list()
-        else:
-            return p_space.to_list()
+            p_space = midpoints(p_space)
+        return p_space.tolist()
             
     else:
         raise ValueError('Input parameters must be a single valued array or a triple.')
