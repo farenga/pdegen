@@ -1,3 +1,3 @@
 import pdegen
 
-pdegen.generate("problem_config.yaml")
+pdegen.generate("examples/adr2d.yaml")

@@ -9,13 +9,12 @@ from .utils import create_dataset_directory_tree, midpoints, get_param_space
 
 set_log_active(False)
 
-class Heat2D(Problem):
+class Burgers1D(Problem):
     '''
-    2D Heat Equation:
+    1D Burgers Equation:
 
-    DuDt = alpha*Laplacian(u(x))        x in [-1,1]^2 x (0,T)
-    u(x,t) = uD(x,t)                    x on D[-1,1]^2
-    u(x,0) = exp(-(x^2+y^2)/2)          x in [-1,1]^2 x {0} 
+    DuDt - Laplacian(u(x))=f(x), x in [-1,1]
+    u(x) = uD(x)   , x on DOmega
 
     '''
     def __init__(self, config: ProblemConfig):
@@ -23,6 +22,7 @@ class Heat2D(Problem):
 
         self.directory = config.directory
         create_dataset_directory_tree(self.directory)
+
         self.save_vtk = config.save_vtk
 
         self.set_domain(config)
@@ -44,14 +44,14 @@ class Heat2D(Problem):
 
 
     def set_domain(self,config):
-        if config.domain == 'square':
+        if config.domain == 'unitinterval':
             self.n = config.n
-            self.mesh = RectangleMesh(Point(-1, -1), Point(1, 1), self.n, self.n)
+            self.mesh = UnitIntervalMesh(self.n)
             self.V = FunctionSpace(self.mesh, 'P', 1)
             self.bc = DirichletBC(self.V, Constant(0), 'on_boundary')
             File(os.path.join(self.directory,'mesh/mesh.pvd')) << self.mesh
         else:
-            raise SyntaxError('only square is available as domain type')
+            raise SyntaxError('only unitinterval is available as domain type')
 
 
     def solve(self):
@@ -62,7 +62,7 @@ class Heat2D(Problem):
                 vtkfile = File(os.path.join(self.directory,'vtk','solution_'+str(i),'solution.pvd'))
 
             # Define initial value
-            u_0 = Expression('exp(-a*(pow(x[0], 2) + pow(x[1], 2)))', degree=2, a=5)
+            u_0 = Expression('-sin(2*pi*x[0])', degree=1)
             u_n = interpolate(u_0, self.V)
 
             # Define variational problem
@@ -70,17 +70,17 @@ class Heat2D(Problem):
             v = TestFunction(self.V)
             f = Constant(0)
 
-            lhs = u*v*dx + p1*self.dt*dot(grad(u), grad(v))*dx 
-            rhs = (u_n + self.dt*f)*v*dx
+            F = ((u - u_n)/self.dt*v + u*u.dx(0)*v + p1*u.dx(0)*v.dx(0) )*dx
 
             # Time-stepping0
             u_sol = Function(self.V)
+            F  = action(F, u_sol)
             t = self.time_interval[0]
 
             for j in range(self.Nt):
 
                 t += self.dt
-                solve(lhs == rhs, u_sol, self.bc)
+                solve(F==0, u_sol, self.bc)
 
                 self.S[i,j,:] = torch.from_numpy(u_sol.vector().get_local(vertex_to_dof_map(self.V)))
                 self.P[i,j,:] = torch.tensor([p1,t])

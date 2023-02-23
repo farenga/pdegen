@@ -1,0 +1,10 @@
+# 1D Burgers PDEGen config file
+problem: 'burgers1d'
+domain: 'unitinterval'
+parameters: [[.005,.5,5]]
+midpoints: True
+n: 255
+Nt: 200
+time_interval: [0.,1.]
+directory: 'burgers_dataset'
+save_vtk: False

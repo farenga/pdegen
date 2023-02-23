@@ -1,0 +1,11 @@
+# PDEGen config file
+problem: 'adr2d'
+domain: 'square'
+#parameters: [[0.002,0.005,5],[30,70,3],[0.4,0.6,4],[0.4,0.6,4]]
+parameters: [[0.002],[30],[0.4],[0.4]]
+midpoints: False
+n: 100
+Nt: 400
+time_interval: [0.,100.] # 40*pi
+directory: 'adr_dataset'
+save_vtk: True

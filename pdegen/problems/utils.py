@@ -26,3 +26,16 @@ def makedir(path):
 
 def midpoints(array: np.array):
     return (array[:-1] + array[1:])/2
+
+def get_param_space(p, config):
+    if len(p)==1:
+        return p
+    elif len(p)==3:
+        p_space = np.linspace(p[0],p[1],p[2])
+        if config.midpoints:
+            return midpoints(p_space).to_list()
+        else:
+            return p_space.to_list()
+            
+    else:
+        raise ValueError('Input parameters must be a single valued array or a triple.')

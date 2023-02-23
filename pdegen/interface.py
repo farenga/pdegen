@@ -12,7 +12,7 @@ class ProblemConfig:
     Nt: int = None                  # Number of timesteps
     time_interval: list = None      # Time interval [t0,t1]
     directory: str = 'dataset'      # Working directory
-    
+    save_vtk: bool = False          # Save vtk visualization files
 
 class Problem:
     def __init__(self, config: ProblemConfig or str):

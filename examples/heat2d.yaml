@@ -1,9 +1,10 @@
 # PDEGen config file
 problem: 'heat2d'
-domain: 'unitsquare'
+domain: 'square'
 parameters: [[.005,.5,5]]
 midpoints: True
 n: 63
 Nt: 500
 time_interval: [0.,5.]
 directory: 'heat_dataset'
+save_vtk: True
