@@ -1,6 +1,6 @@
 # PDEGen
 
-PDEGen is an open-source package for generating datasets of Partial Differential Equations (PDEs) solutions. 
+PDEGen is an open-source package for generating datasets of time-dependent parameterized Partial Differential Equations (PDEs) solutions. 
 
 The main aim of the library is to enable reproducibility in the field of Machine Learning for PDEs, where there is a lack of common benchmarking datasets, and dataset-sharing is usually unfeasible, due to file sizes.
 
@@ -11,20 +11,14 @@ PDEGen tryies to solve those problems by providing an intuitive interface for da
 
 The library implements multiple standard problems (Heat, Advection-Diffusion-Reaction, Stokes)
 
-    import pdegen
-    pdegen.backend('fenics')
-
-    config = PDEGenConfig(
-        problem = 'heat-unsteady',
-        params = [a,b,c,], # or [(a0, a1, 10), (b0, b1, 10)]
-        domain = 'Square',
-        Nh = 64,
-        Nt = 200,
-        time_interval = [0,2],
-        datatype = 'float32',
-        directory = 'path/to/directory'
-
-    )
-
-    pdegen.generate(config)
+## Install
     
+    pip install pdegen
+
+## Usage
+
+    import pdegen
+    pdegen.generate("problem_config.yaml")
+
+
+### Configuration
