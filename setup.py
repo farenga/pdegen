@@ -9,7 +9,7 @@ setuptools.setup(
     description="Partial Differential Equations Dataset Generation Library",
     url="https://github.com/farenga/pdegen",
     packages=setuptools.find_packages(),
-    install_requires=['fenics>=2019.2.0.dev0','torch>=1.5.0', 'numpy>=1.21.0'],
+    install_requires=['fenics>=2018.1.0','torch>=1.5.0', 'numpy>=1.21.0'],
     python_requires='~=3.7',
     classifiers=[
         "Programming Language :: Python :: 3",

@@ -16,7 +16,7 @@ In such a way sharing the configuration file is enough for setting up the proble
 
 ## Install
     
-    pip install git+https://github.com/farenga/pdegen
+    pip install pdegen
 
 ## Usage
 By loading a YAML configuration file:
