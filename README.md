@@ -8,7 +8,7 @@ PDEGen is an open-source package for generating datasets of time-dependent param
 The main aim of the library is to enable reproducibility in the field of Data-Driven PDEs modeling, whose benchmarking datasets landscape is usually characterized by:
 - low data availability/sharing
 - data fragmentation (snapshots, parameters, meshes)
-- Heavy non-tensorized data formats
+- heavy non-tensorized data formats
 
 PDEGen aims to enable datasets generation and reproduction via pre-implemented pde-solvers scripts and a common configuration files-based interface.
 
@@ -34,3 +34,5 @@ or by defining a ProblemConfig
     )
     
     pdegen.generate("problem_config.yaml")
+
+## Dataset structure

@@ -4,7 +4,8 @@ from .problems import *
 PROBLEMS_DICT = {
     'burgers1d': Burgers1D,
     'heat2d': Heat2D,
-    'adr2d': ADR2D
+    'adr2d': ADR2D,
+    'navierstokes2d': NavierStokes2DCylinder
     }
 
 def generate(config: ProblemConfig or str):

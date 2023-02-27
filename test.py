@@ -1,3 +1,3 @@
 import pdegen
 
-pdegen.generate("examples/heat2d.yaml")
+pdegen.generate("examples/ns2d.yaml")
