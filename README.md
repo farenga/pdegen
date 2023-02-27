@@ -36,3 +36,5 @@ or by defining a ProblemConfig
     pdegen.generate("problem_config.yaml")
 
 ## Dataset structure
+
+The generated dataset has the following structure: ...
