@@ -19,12 +19,17 @@ In such a way sharing the configuration file is enough for setting up the proble
     pip install pdegen
 
 ## Usage
-By loading a YAML configuration file:
+### CLI
+
+    python3 -m pdegen.generate --config examples/ns2d.yaml 
+
+### Script
+By loading a configuration .yaml file
 
     import pdegen
-    pdegen.generate("problem_config.yaml")
+    pdegen.generate("examples/ns2d.yaml")
 
-or by defining a ProblemConfig
+or by via ProblemConfig class
 
     from pdegen import ProblemConfig
 
@@ -33,8 +38,31 @@ or by defining a ProblemConfig
         ...
     )
     
-    pdegen.generate("problem_config.yaml")
+    pdegen.generate(problem_config)
 
 ## Dataset structure
 
-The generated dataset has the following structure: ...
+The generated dataset has the following structure:
+
+    dataset/
+        ├── tensors/
+        |      ├── snapshots/
+        |      |     ├── S.pt
+        |      |     └── ...
+        |      └── parameters/
+        |            ├── P.pt
+        |            └── ...
+        ├── mesh/
+        │      └── mesh.pvd
+        └── vtk/...
+
+With the following tensors shapes:
+
+- S: (N,Nt,Nh)
+- P: (N,Nt,Np)
+
+where:
+- N: number of parameters instances
+- Nt: number of timesteps
+- Nh: number of spatial dop
+- Np: number of models' parameters + 1 (including time)
