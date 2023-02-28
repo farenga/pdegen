@@ -21,7 +21,7 @@ In such a way sharing the configuration file is enough for setting up the proble
 ## Usage
 ### CLI
 
-    python3 -m pdegen.generate --config examples/ns2d.yaml 
+    python3 -m pdegen examples/ns2d.yaml 
 
 ### Script
 By loading a configuration .yaml file
