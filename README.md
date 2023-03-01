@@ -5,7 +5,7 @@
 
 PDEGen is an open-source package for generating datasets of time-dependent parameterized Partial Differential Equations (PDEs) solutions. 
 
-The main aim of the library is to enable reproducibility in the field of Data-Driven PDEs modeling, whose benchmarking datasets landscape is usually characterized by:
+The main aim of the library is to enable reproducibility in the field of Data-Driven PDEs modeling, whose benchmarking datasets landscape is characterized by:
 - low data availability/sharing
 - data fragmentation (snapshots, parameters, meshes)
 - heavy non-tensorized data formats
@@ -64,5 +64,5 @@ With the following tensors shapes:
 where:
 - N: number of parameters instances
 - Nt: number of timesteps
-- Nh: number of spatial dop
+- Nh: number of spatial dof
 - Np: number of models' parameters + 1 (including time)

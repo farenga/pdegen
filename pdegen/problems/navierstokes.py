@@ -32,13 +32,13 @@ class NavierStokes2DCylinder(Problem):
         self.p1_space = get_param_space(self.parameters[0], config) #   mu: dynamic viscosity 
         self.p2_space = get_param_space(self.parameters[1], config) #   rho: density
         self.param_space = [self.p1_space, self.p2_space]
-        self.param_instances = product(*self.param_space)
+        self.param_instances = list(product(*self.param_space))
 
         self.Nh = self.mesh.num_vertices()    # number of DOF
         print(self.Nh)
         self.Nt = config.Nt                   # number of timesteps              
         self.Np = 3                           # num param + time
-        self.N = len(sum(self.param_space,[]))
+        self.N = len(self.param_instances)
 
         self.time_interval = config.time_interval   
         self.dt = (self.time_interval[1]-self.time_interval[0]) / self.Nt 

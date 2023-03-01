@@ -32,12 +32,12 @@ class ADR2D(Problem):
         self.p3_space = get_param_space(self.parameters[2], config)
         self.p4_space = get_param_space(self.parameters[3], config)
         self.param_space = [self.p1_space, self.p2_space, self.p3_space, self.p4_space]
-        self.param_instances = product(*self.param_space)
+        self.param_instances = list(product(*self.param_space))
 
         self.Nh = self.mesh.num_vertices()    # number of DOF
         self.Nt = config.Nt                   # number of timesteps              
         self.Np = 5                           # num param + time
-        self.N = len(sum(self.param_space,[]))
+        self.N = len(self.param_instances)
 
         self.time_interval = config.time_interval   # final time
         self.dt = (self.time_interval[1]-self.time_interval[0]) / self.Nt 
