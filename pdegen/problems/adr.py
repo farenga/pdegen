@@ -1,11 +1,12 @@
-from ..interface import Problem, ProblemConfig
-from .utils import create_dataset_directory_tree
 import os
 import torch
+import h5py
 import numpy as np
 from fenics import *
 from itertools import product
-from .utils import create_dataset_directory_tree, midpoints, get_param_space
+
+from ..interface import Problem, ProblemConfig
+from .utils import create_dataset_directory_tree, get_param_space
 
 set_log_active(False)
 
@@ -19,9 +20,13 @@ class ADR2D(Problem):
     def __init__(self, config: ProblemConfig):
         super().__init__(config)
 
+
         self.directory = config.directory
-        create_dataset_directory_tree(self.directory)
+        self.filename = config.filename
         self.save_vtk = config.save_vtk
+        self.save_mesh = config.save_mesh
+        
+        create_dataset_directory_tree(self.directory, self.save_vtk, self.save_mesh)
 
         self.set_domain(config)
 
@@ -51,8 +56,10 @@ class ADR2D(Problem):
             self.n = config.n
             self.mesh = RectangleMesh(Point(0, 0), Point(1, 1), self.n, self.n)
             self.V = FunctionSpace(self.mesh, 'P', 1)
+            self.coords = self.mesh.coordinates().astype('float32')
             self.bc = DirichletBC(self.V, Constant(0), 'on_boundary')
-            File(os.path.join(self.directory,'mesh/mesh.pvd')) << self.mesh
+            if self.save_mesh:
+                File(os.path.join(self.directory,'mesh/mesh.pvd')) << self.mesh
         else:
             raise SyntaxError('only square is available as domain type')
 
@@ -78,13 +85,17 @@ class ADR2D(Problem):
             a = u*v*dx + p1*self.dt*inner(grad(u),grad(v))*dx + self.dt*inner(b,grad(u))*v*dx + c*self.dt*u*v*dx
             L = u_n*v*dx + self.dt*f*v*dx
 
-            # Time-stepping0
+            # Time-stepping
             u_sol = Function(self.V)
             t = self.time_interval[0]
 
             for j in range(self.Nt):
 
                 t += self.dt
+                
+                b = Expression(("cos(2*pi*t/p2)","sin(2*pi*t/p2)"), degree=2, p2=p2, t=t)
+                a = u*v*dx + p1*self.dt*inner(grad(u),grad(v))*dx + self.dt*inner(b,grad(u))*v*dx + c*self.dt*u*v*dx
+                
                 solve(a == L, u_sol)
 
                 self.S[i,j,:] = torch.from_numpy(u_sol.vector().get_local(vertex_to_dof_map(self.V)))
@@ -96,8 +107,4 @@ class ADR2D(Problem):
                 u_n.assign(u_sol)
             i+=1
             
-    def save_dataset(self):
-        torch.save(self.S, os.path.join(self.directory,'tensors/snapshots/S.pt'))
-        torch.save(self.P, os.path.join(self.directory,'tensors/parameters/P.pt'))
-        print('Dataset correctly saved to:', self.directory)
-        
+    

@@ -1,11 +1,10 @@
-from ..interface import Problem, ProblemConfig
-from .utils import create_dataset_directory_tree
 import os
 import torch
-import numpy as np
+import h5py
 from fenics import *
-from itertools import product
-from .utils import create_dataset_directory_tree, midpoints, get_param_space
+
+from ..interface import Problem, ProblemConfig
+from .utils import create_dataset_directory_tree, get_param_space
 
 set_log_active(False)
 
@@ -21,9 +20,11 @@ class Burgers1D(Problem):
         super().__init__(config)
 
         self.directory = config.directory
-        create_dataset_directory_tree(self.directory)
-
+        self.filename = config.filename
         self.save_vtk = config.save_vtk
+        self.save_mesh = config.save_mesh
+        
+        create_dataset_directory_tree(self.directory, self.save_vtk, self.save_mesh)
 
         self.set_domain(config)
 
@@ -48,8 +49,10 @@ class Burgers1D(Problem):
             self.n = config.n
             self.mesh = UnitIntervalMesh(self.n)
             self.V = FunctionSpace(self.mesh, 'P', 1)
+            self.coords = self.mesh.coordinates().astype('float32')
             self.bc = DirichletBC(self.V, Constant(0), 'on_boundary')
-            File(os.path.join(self.directory,'mesh/mesh.pvd')) << self.mesh
+            if self.save_mesh:
+                File(os.path.join(self.directory,'mesh/mesh.pvd')) << self.mesh
         else:
             raise SyntaxError('only unitinterval is available as domain type')
 
@@ -62,7 +65,7 @@ class Burgers1D(Problem):
                 vtkfile = File(os.path.join(self.directory,'vtk','solution_'+str(i),'solution.pvd'))
 
             # Define initial value
-            u_0 = Expression('-sin(2*pi*x[0])', degree=1)
+            u_0 = Expression('sin(2*pi*x[0])+0.5*sin(3*pi*x[0])', degree=2)
             u_n = interpolate(u_0, self.V)
 
             # Define variational problem
@@ -72,7 +75,7 @@ class Burgers1D(Problem):
 
             F = ((u - u_n)/self.dt*v + u*u.dx(0)*v + p1*u.dx(0)*v.dx(0) )*dx
 
-            # Time-stepping0
+            # Time-stepping
             u_sol = Function(self.V)
             F  = action(F, u_sol)
             t = self.time_interval[0]
@@ -90,8 +93,5 @@ class Burgers1D(Problem):
 
                 u_n.assign(u_sol)
 
-    def save_dataset(self):
-        torch.save(self.S, os.path.join(self.directory,'tensors/snapshots/S.pt'))
-        torch.save(self.P, os.path.join(self.directory,'tensors/parameters/P.pt'))
-        print('Dataset correctly saved to:', self.directory)
+    
         

@@ -1,10 +1,12 @@
 # PDEGen config file
 problem: 'adr2d'
 domain: 'square'
-parameters: [[0.002,0.005,5],[30,70,3],[0.4,0.6,4],[0.4,0.6,4]]
+parameters: [[0.002,0.005,2],[30,70,2],[0.4,0.6,1],[0.4,0.6,1]]
 midpoints: False
-n: 100
+n: 64
 Nt: 400
 time_interval: [0.,100.] # 40*pi
-directory: 'adr_dataset'
+directory: 'adr'
+filename: 'adr_test'
+save_mesh: True
 save_vtk: True

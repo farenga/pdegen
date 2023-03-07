@@ -15,13 +15,19 @@ PDEGen aims to enable datasets generation and reproduction via pre-implemented p
 In such a way sharing the configuration file is enough for setting up the problem and generating data, instead of sharing big and fragmented datasets.
 
 ## Install
-    
+PDEGen can be installed via pip
+
     pip install pdegen
+
+The package relies on FEniCS for solving variational problems, and on h5py for saving the datasets. In order to avoid conflicts between pip packages, it is recommended to install both FEniCS and h5py via `apt` package manager if using Ubuntu/Debian
+
+    apt install python3-h5py
+    apt install fenics
 
 ## Usage
 ### CLI
 
-    python3 -m pdegen examples/ns2d.yaml 
+    python3 -m pdegen path/to/config.yaml
 
 ### Script
 By loading a configuration .yaml file

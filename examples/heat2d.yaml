@@ -6,5 +6,7 @@ midpoints: True
 n: 63
 Nt: 500
 time_interval: [0.,5.]
-directory: 'heat_dataset'
-save_vtk: True
+directory: 'heat'
+filename: 'heat'
+save_mesh: False
+save_vtk: False

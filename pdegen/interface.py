@@ -1,3 +1,5 @@
+import os
+import h5py
 from dataclasses import dataclass
 import yaml
 
@@ -8,11 +10,13 @@ class ProblemConfig:
     domain: str
     parameters: int or list         # Parameters [a,b,...] or [[a0,a1,Na],[b0,b1,Nb]]
     midpoints: bool = False         # Take the midpoints of the specified parameters spaces
-    n: int = 32                     # Number of lateral dof
+    n: int = 128                    # Number of lateral dof
     Nt: int = None                  # Number of timesteps
     time_interval: list = None      # Time interval [t0,t1]
-    directory: str = 'dataset'      # Working directory
-    save_vtk: bool = False          # Save vtk visualization files
+    directory: str = ''             # Path to working directory
+    filename: str = 'dataset'       # Dataset name
+    save_vtk: bool = False          # Save vtk .pvd visualization files
+    save_mesh: bool = False         # Save mesh .pvd file
 
 class Problem:
     def __init__(self, config: ProblemConfig or str):
@@ -21,8 +25,13 @@ class Problem:
     def solve(self):
         pass
     
-    def save(self):
-        pass
+    def save_dataset(self):
+        h5_file = h5py.File(os.path.join(self.directory,self.filename+'.hdf5'), 'w')
+        h5_file.create_dataset('S', data=self.S)
+        h5_file.create_dataset('P', data=self.P)
+        h5_file.create_dataset('coords', data=self.coords)
+        h5_file.close()
+        print('Dataset correctly saved to:', self.directory)
 
 def parse_config(filepath):
     
@@ -38,6 +47,7 @@ def parse_config(filepath):
         Nt = config_file['Nt'],
         time_interval=config_file['time_interval'],
         directory = config_file['directory'],
+        filename = config_file['filename'],
         save_vtk = config_file['save_vtk']
     )
 

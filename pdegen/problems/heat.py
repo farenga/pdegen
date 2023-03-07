@@ -22,8 +22,11 @@ class Heat2D(Problem):
         super().__init__(config)
 
         self.directory = config.directory
-        create_dataset_directory_tree(self.directory)
+        self.filename = config.filename
         self.save_vtk = config.save_vtk
+        self.save_mesh = config.save_mesh
+        
+        create_dataset_directory_tree(self.directory, self.save_vtk, self.save_mesh)
 
         self.set_domain(config)
 
@@ -48,6 +51,7 @@ class Heat2D(Problem):
             self.n = config.n
             self.mesh = RectangleMesh(Point(-1, -1), Point(1, 1), self.n, self.n)
             self.V = FunctionSpace(self.mesh, 'P', 1)
+            self.coords = self.mesh.coordinates().astype('float32')
             self.bc = DirichletBC(self.V, Constant(0), 'on_boundary')
             File(os.path.join(self.directory,'mesh/mesh.pvd')) << self.mesh
         else:
@@ -89,9 +93,3 @@ class Heat2D(Problem):
                     vtkfile << (u_sol, t)
 
                 u_n.assign(u_sol)
-
-    def save_dataset(self):
-        torch.save(self.S, os.path.join(self.directory,'tensors/snapshots/S.pt'))
-        torch.save(self.P, os.path.join(self.directory,'tensors/parameters/P.pt'))
-        print('Dataset correctly saved to:', self.directory)
-        
