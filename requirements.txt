@@ -1,0 +1,10 @@
+fenics==2019.1.0
+fenics_dolfin==2019.2.0.dev0
+h5py==3.8.0
+h5py._debian_h5py_serial==3.6.0
+mshr==2019.2.0.dev0
+numpy==1.21.5
+PyYAML==6.0
+setuptools==59.6.0
+torch==1.13.1
+vtk==9.2.6
