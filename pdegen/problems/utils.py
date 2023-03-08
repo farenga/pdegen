@@ -1,7 +1,5 @@
 import os
 import numpy as np
-from vtk import vtkXMLUnstructuredGridReader
-from vtkmodules.util.numpy_support import vtk_to_numpy
 
 def create_dataset_directory_tree(directory_path: str,save_vtk: bool=False, save_mesh: bool=False):
     makedir(directory_path)
@@ -34,17 +32,3 @@ def get_param_space(p, config):
             
     else:
         raise ValueError('Input parameters must be a single valued array or a triple.')
-
-
-def load_mesh_coords(mesh_path: str, return_split: bool=False):
-        reader = vtkXMLUnstructuredGridReader()
-        reader.SetFileName(mesh_path)
-        reader.Update()  
-        nodes_vtk_array= reader.GetOutput().GetPoints().GetData()
-        nodes_numpy_array = vtk_to_numpy(nodes_vtk_array)
-
-        if return_split:
-            return nodes_numpy_array[:,0] , nodes_numpy_array[:,1]
-        else:
-            return nodes_numpy_array
-    
