@@ -3,7 +3,7 @@ import setuptools
 
 setuptools.setup(
     name="pdegen",
-    version="0.0.4",
+    version="0.0.5",
     author="Nicola Farenga",
     author_email="nicola.farenga@mail.polimi.it",
     description="Partial Differential Equations Dataset Generation Library",

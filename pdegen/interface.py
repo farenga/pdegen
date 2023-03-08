@@ -48,6 +48,7 @@ def parse_config(filepath):
         time_interval=config_file['time_interval'],
         directory = config_file['directory'],
         filename = config_file['filename'],
+        save_mesh = config_file['save_mesh']
         save_vtk = config_file['save_vtk']
     )
 
