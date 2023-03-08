@@ -1,4 +1,4 @@
-# 1D Burgers PDEGen config file
+# PDEGen config file
 problem: 'burgers1d'
 domain: 'unitinterval'
 parameters: [[.005,.05,10]]
