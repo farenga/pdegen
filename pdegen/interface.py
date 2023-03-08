@@ -15,8 +15,8 @@ class ProblemConfig:
     time_interval: list = None      # Time interval [t0,t1]
     directory: str = ''             # Path to working directory
     filename: str = 'dataset'       # Dataset name
-    save_vtk: bool = False          # Save vtk .pvd visualization files
     save_mesh: bool = False         # Save mesh .pvd file
+    save_vtk: bool = False          # Save vtk .pvd visualization files
 
 class Problem:
     def __init__(self, config: ProblemConfig or str):
@@ -48,7 +48,7 @@ def parse_config(filepath):
         time_interval=config_file['time_interval'],
         directory = config_file['directory'],
         filename = config_file['filename'],
-        save_mesh = config_file['save_mesh']
+        save_mesh = config_file['save_mesh'],
         save_vtk = config_file['save_vtk']
     )
 
